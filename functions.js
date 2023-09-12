@@ -35,15 +35,33 @@ async function WaitReadyElement(elementQuerySelector, timeRequest = 300, limrequ
 
 //get Product of tilda
 
-function productParseTilda() {
-    try {
-        const tildaStoreXHR = window.tStoreXHR;
-        const key =  Object.keys(tildaStoreXHR)[0];
-        const tildaStore = JSON.parse(tildaStoreXHR[key].response)
-        console.log("ready")
-        return tildaStore
-    } catch (err) {
-        console.log("not ready")
-        return false;
-    }
+async function productParseTilda(interval = 300, limitTry = 10) {
+    let promise = new Promise((resolve, reject)=>{
+        let counter = 0
+        let tryGetstory = setInterval(()=>{
+            counter++;
+            try {
+                const tildaStoreXHR = window.tStoreXHR;
+                const key =  Object.keys(tildaStoreXHR)[0];
+                const tildaStore = JSON.parse(tildaStoreXHR[key].response)
+                //console.log("ready")
+                clearInterval(tryGetstory)
+                return resolve(tildaStore)
+            } catch (err) {
+                //console.log("not ready")
+                if(counter > limitTry) return reject(new Error("can't get Tildastore" ));
+                
+            }
+        },interval)
+    })
+
+    let result = await promise
+    return result
 }
+
+//use
+// async function init(){
+//     window.my_store = await productParseTilda()
+//     console.log('get store')
+// }
+// init()
