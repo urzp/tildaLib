@@ -1,0 +1,108 @@
+<style>
+	.uc-hashtags{
+		display: none; 
+	}
+</style>
+
+<script>
+	const buttons = [ '.my_button' ] //имена классов элементов для кнопок перечисленные через запятую в кавычках. Точка в переди обязатено нужна 
+	const hashTags = [ '.hashTag_1', '.hashTag_2', '.hashTag_3', '.hashTag_4', '.hashTag_5' ] //имена классов элементов для хештегов перечисленные через запятую в кавычках. Точка в переди обязатено нужна 
+
+	const zeroBlock = '.uc-hashtags' // имя класса для зеро блока
+	
+	const buttonsTarget = '.t762__price-wrapper.js-store-price-wrapper'  // имя класса для блока куда вставляются кнопки
+	const hTagTarget = '.js-product-controls-wrapper' // имя класса для блока куда вставляются хеш теги
+
+	const buttonStyles = { // стили для кнопок 
+		position:'inherit',
+		'margin-left': '20px'
+	}
+	const hTagStyles = { // стили для хештегов
+		position:'inherit',
+		'margin-right': '10px',
+		'margin-bottom':'10px',
+	}
+	const buttonsTargetStyles = { // стили для блока куда вставляются кнопки
+		'display': 'flex'
+	}
+	const hTagTargetStyles = { // стили для блока куда вставляются хеш теги
+		'display': 'flex',
+		'flex-wrap': 'wrap',
+		'margin-top': '20px',
+		'margin-bottom':'20px',
+	}
+
+	const wrapCss = [
+		'width',
+		'height'
+	]
+	const tn_atomCss = [
+		'color',
+		'font-size',
+		'font-family',
+		'font-weight',
+		'line-height',
+		'border-style',
+		'border-color',
+		'border-width',
+		'border-radius',
+		'background-color',
+		'background-position',
+		'transition',
+		'text-decoration',
+		'display',
+		'vertical-align',
+		'text-align',
+	]
+
+	$( document ).ready(()=>{
+		cloneButtons()
+		cloneHashTags()
+		afterLoadElement('.js-product-controls-wrapper', cloneHashTags)
+	})
+
+	function afterLoadElement(cssSelector, callBack){
+		let id_int = setInterval(()=>{
+			if(!$(cssSelector)) return false
+			callBack()
+			clearInterval(id_int)	
+		}, 1000)
+	}
+
+	function cloneButtons(){
+		buttons.forEach(item =>{
+			cloneElemrntTo(`${zeroBlock} ${item}`, buttonsTarget)
+			$(item).css(buttonStyles)	
+		})
+		$(buttonsTarget).css(buttonsTargetStyles)
+	}
+
+	function cloneHashTags(){
+		hashTags.forEach(item =>{
+			cloneElemrntTo(`${zeroBlock} ${item}`, hTagTarget)
+			$(item).css(hTagStyles)
+		})
+		$(hTagTarget).css(hTagTargetStyles)
+	}
+
+	function cloneElemrntTo(element_cssSelect, target_cssSelect){
+		cloneCss( element_cssSelect + ' .tn-atom' )
+		$( element_cssSelect ).clone().appendTo( target_cssSelect ).addClass('clone')
+	}
+
+	function cloneCss(cssSelect){
+		let css_list = getCss(cssSelect, tn_atomCss ,wrapCss)
+		$(cssSelect).css(css_list)
+	}
+
+	function getCss(cssSelect, cssProperties, cssParent){
+		let result = {}
+		cssParent.forEach( item => {
+			result[item] = $(cssSelect).parent().css(item)
+		} )
+		cssProperties.forEach( item => {
+			result[item] = $(cssSelect).css(item)
+		} )
+		return result
+	}
+</script>
