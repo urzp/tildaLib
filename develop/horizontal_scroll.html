@@ -1,0 +1,41 @@
+<!-- Разработка горизонтального скрола I-вариант -->
+
+<script>
+    let elem = document.getElementById('rec681689242')
+    
+    if (elem.addEventListener) {
+      if ('onwheel' in document) {
+        // IE9+, FF17+, Ch31+
+        elem.addEventListener("wheel", onWheel);
+      } else if ('onmousewheel' in document) {
+        // устаревший вариант события
+        elem.addEventListener("mousewheel", onWheel);
+      } else {
+        // Firefox < 17
+        elem.addEventListener("MozMousePixelScroll", onWheel);
+      }
+    } else { // IE8-
+      elem.attachEvent("onmousewheel", onWheel);
+    }
+    
+    function onWheel(e) {
+    
+      e = e || window.event;
+      let delta = e.deltaY || e.detail || e.wheelDelta;
+      let left = $("#rec681689242 .t396__artboard").position().left + delta*(-1)
+      if(left > 0){
+        left = 0
+      }else if(left > -2159){
+        if($(window).scrollTop()>300){
+          $(window).scrollTop(550)
+        }
+        e.preventDefault ? e.preventDefault() : (e.returnValue = false);
+      }else{
+        left = -2160
+      }
+      left = left + 'px'
+      //console.log(left)
+      $("#rec681689242 .t396__artboard").css({'left':left})
+      
+    }
+    </script>

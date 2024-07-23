@@ -1,0 +1,78 @@
+<!-- Разработка горизонтального скрола II-вариант -->
+
+<script>
+    let elem = document.getElementById('rec683148437')
+    //let elem = document.getElementsByClassName('t-body')[0]
+    if (elem.addEventListener) {
+      if ('onwheel' in document) {
+        // IE9+, FF17+, Ch31+
+        elem.addEventListener("wheel", onWheel);
+      } else if ('onmousewheel' in document) {
+        // устаревший вариант события
+        elem.addEventListener("mousewheel", onWheel);
+      } else {
+        // Firefox < 17
+        elem.addEventListener("MozMousePixelScroll", onWheel);
+      }
+    } else { // IE8-
+      elem.attachEvent("onmousewheel", onWheel);
+    }
+    
+    function onWheel(e) {
+    
+      e = e || window.event;
+      let delta = e.deltaY || e.detail || e.wheelDelta;
+      scrollSlader(e, delta)
+
+    }
+
+    function scrollSlader(e, delta){
+        e.preventDefault ? e.preventDefault() : (e.returnValue = false);
+        if(delta>0) {
+            if(sladerEnd('#rec683148437')){
+                $("html, body").animate( {scrollTop:2500}, 500 )
+                return false
+            } 
+            $('.t-slds__arrow-right').click()
+        }
+        if(delta<0) {
+            if(sladerStart('#rec683148437')){
+                $("html, body").animate( {scrollTop:0}, 500 )
+                return false
+            }
+            $('.t-slds__arrow-left').click()
+        } 
+
+        
+    }
+
+    elem = document.getElementsByClassName('t-body')[0]
+    elem.addEventListener("wheel",(e)=>{
+        console.log('scroll')
+        e = e || window.event;
+        let delta = e.deltaY || e.detail || e.wheelDelta;   
+        if(delta>0&&$(window).scrollTop()>100&&sladerStart('#rec683148437')){
+            $(window).scrollTop($('#rec683148437').position().top)
+            e.preventDefault ? e.preventDefault() : (e.returnValue = false);
+        }
+        if(delta<0&&$(window).scrollTop()<1800&&sladerEnd('#rec683148437')){
+            $(window).scrollTop($('#rec683148437').position().top)
+            e.preventDefault ? e.preventDefault() : (e.returnValue = false);
+        }
+    })
+
+    // $("#rec683142105").scroll(function(){
+    //     if($(window).scrollTop()>800){
+    //         $(window).scrollTop($('#rec683148437').position().top)
+    //     }
+    // })  
+
+    function sladerEnd(id){
+        let len = $(id + ' .t-slds__item').length - 1
+        return  $($(id + ' .t-slds__item')[len - 1]).hasClass('t-slds__item_active')
+    }
+
+    function sladerStart(id){
+        return  $($(id + ' .t-slds__item')[1]).hasClass('t-slds__item_active')
+    }
+    </script>
