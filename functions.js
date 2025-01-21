@@ -65,3 +65,12 @@ async function productParseTilda(interval = 300, limitTry = 10) {
 //     console.log('get store')
 // }
 // init()
+
+function addProductToCard(){
+    let Product =  { pack_m: "0", pack_x: "0", pack_y: "0", pack_z: "0", quantity: 1, recid: "000000001",ts: 1669751698  }
+    tcart.products.push(Product);
+    tcart__saveLocalObj();  
+    tcart__updateTotalProductsinCartObj();
+    tcart__reDrawCartIcon();
+    tcart__openCart()
+}
